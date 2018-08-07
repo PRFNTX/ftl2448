@@ -1,0 +1,181 @@
+[gd_scene load_steps=4 format=2]
+
+[ext_resource path="res://PlanetarySystem.gd" type="Script" id=1]
+[ext_resource path="res://SpaceEnvironment.tres" type="Environment" id=2]
+[ext_resource path="res://Art/light-spot-orb-png-8.png" type="Texture" id=3]
+
+[node name="PlanetarySystem" type="Spatial"]
+
+script = ExtResource( 1 )
+_sections_unfolded = [ "Pause" ]
+
+[node name="camera" type="Camera" parent="." index="0"]
+
+transform = Transform( 1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, 0, 1, 0 )
+keep_aspect = 1
+cull_mask = 1048575
+environment = ExtResource( 2 )
+h_offset = 0.0
+v_offset = 0.0
+doppler_tracking = 0
+projection = 1
+current = false
+fov = 70.0
+size = 40.0
+near = 0.05
+far = 100.0
+_sections_unfolded = [ "Transform" ]
+
+[node name="D" type="Sprite3D" parent="." index="1"]
+
+transform = Transform( 4, 0, 0, 0, 4, 0, 0, 0, 4, 0, -1, 0 )
+layers = 1
+material_override = null
+cast_shadow = 1
+extra_cull_margin = 0.0
+use_in_baked_light = false
+lod_min_distance = 0.0
+lod_min_hysteresis = 0.0
+lod_max_distance = 0.0
+lod_max_hysteresis = 0.0
+centered = true
+offset = Vector2( 0, 0 )
+flip_h = false
+flip_v = false
+modulate = Color( 0.511108, 0, 0.617188, 1 )
+opacity = 0.1
+pixel_size = 0.01
+axis = 1
+transparent = true
+shaded = false
+double_sided = true
+alpha_cut = 0
+texture = ExtResource( 3 )
+vframes = 1
+hframes = 1
+frame = 0
+region_enabled = false
+region_rect = Rect2( 0, 0, 0, 0 )
+_sections_unfolded = [ "Animation", "Region", "Transform" ]
+
+[node name="C" type="Sprite3D" parent="." index="2"]
+
+transform = Transform( 3, 0, 0, 0, 3, 0, 0, 0, 3, 0, -1, 0 )
+layers = 1
+material_override = null
+cast_shadow = 1
+extra_cull_margin = 0.0
+use_in_baked_light = false
+lod_min_distance = 0.0
+lod_min_hysteresis = 0.0
+lod_max_distance = 0.0
+lod_max_hysteresis = 0.0
+centered = true
+offset = Vector2( 0, 0 )
+flip_h = false
+flip_v = false
+modulate = Color( 0, 0.377411, 0.582031, 1 )
+opacity = 0.1
+pixel_size = 0.01
+axis = 1
+transparent = true
+shaded = false
+double_sided = true
+alpha_cut = 0
+texture = ExtResource( 3 )
+vframes = 1
+hframes = 1
+frame = 0
+region_enabled = false
+region_rect = Rect2( 0, 0, 0, 0 )
+_sections_unfolded = [ "Animation", "Region", "Transform" ]
+
+[node name="B" type="Sprite3D" parent="." index="3"]
+
+transform = Transform( 2, 0, 0, 0, 2, 0, 0, 0, 2, 0, -1, 0 )
+layers = 1
+material_override = null
+cast_shadow = 1
+extra_cull_margin = 0.0
+use_in_baked_light = false
+lod_min_distance = 0.0
+lod_min_hysteresis = 0.0
+lod_max_distance = 0.0
+lod_max_hysteresis = 0.0
+centered = true
+offset = Vector2( 0, 0 )
+flip_h = false
+flip_v = false
+modulate = Color( 0.106812, 0.488281, 0, 1 )
+opacity = 0.1
+pixel_size = 0.01
+axis = 1
+transparent = true
+shaded = false
+double_sided = true
+alpha_cut = 0
+texture = ExtResource( 3 )
+vframes = 1
+hframes = 1
+frame = 0
+region_enabled = false
+region_rect = Rect2( 0, 0, 0, 0 )
+_sections_unfolded = [ "Animation", "Region", "Transform" ]
+
+[node name="A" type="Sprite3D" parent="." index="4"]
+
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -1, 0 )
+layers = 1
+material_override = null
+cast_shadow = 1
+extra_cull_margin = 0.0
+use_in_baked_light = false
+lod_min_distance = 0.0
+lod_min_hysteresis = 0.0
+lod_max_distance = 0.0
+lod_max_hysteresis = 0.0
+centered = true
+offset = Vector2( 0, 0 )
+flip_h = false
+flip_v = false
+modulate = Color( 0.981079, 1, 0.757812, 1 )
+opacity = 0.05
+pixel_size = 0.01
+axis = 1
+transparent = true
+shaded = false
+double_sided = true
+alpha_cut = 0
+texture = ExtResource( 3 )
+vframes = 1
+hframes = 1
+frame = 0
+region_enabled = false
+region_rect = Rect2( 0, 0, 0, 0 )
+_sections_unfolded = [ "Animation", "Region", "Transform", "Visibility" ]
+
+[node name="Back" type="Button" parent="." index="5"]
+
+anchor_left = 0.0
+anchor_top = 0.0
+anchor_right = 0.0
+anchor_bottom = 0.0
+margin_right = 12.0
+margin_bottom = 20.0
+rect_pivot_offset = Vector2( 0, 0 )
+focus_mode = 2
+mouse_filter = 0
+mouse_default_cursor_shape = 0
+size_flags_horizontal = 1
+size_flags_vertical = 1
+toggle_mode = false
+enabled_focus_mode = 2
+shortcut = null
+group = null
+text = "Go Back"
+flat = false
+align = 1
+
+[connection signal="pressed" from="Back" to="." method="_on_Back_pressed"]
+
+
