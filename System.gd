@@ -290,8 +290,8 @@ func _on_StaticBody_input_event( camera, event, click_position, click_normal, sh
 		var show_system = planetary_view_scene.instance()
 		show_system.ref = stars[0]
 		show_system.init()
-		show_system.get_node("camera").current = true
-		get_tree().get_root().get_children()[0].get_node("camera").current = false
+		show_system.get_node("camera_gimbal/camera").current = true
+		get_tree().get_root().get_children()[0].get_node("camera_gimbal/camera").current = false
 		get_tree().get_root().add_child(show_system)
 		get_tree().get_root().get_children()[0].hide()
 

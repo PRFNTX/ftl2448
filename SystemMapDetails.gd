@@ -93,7 +93,7 @@ var tree_moons = {}
 var tree_moon_details = {}
 
 func make_tree():
-	tree = get_parent().get_node("UI/tree")
+	tree = get_parent().get_parent().get_node("UI/tree")
 	root = tree.create_item()
 	var i = 0
 	for system in systems:
@@ -167,9 +167,9 @@ func _on_tree_cell_selected():
 			if levels == 1:
 				# systems[key].system.set_selected(true)
 				# item_selected = systems[key].system
-				get_parent().get_node("select").translation.x = systems[key].x
-				get_parent().get_node("select").translation.y = systems[key].y * 0.5
-				get_parent().get_node("select").translation.z = systems[key].z - 1
+				get_parent().get_parent().get_node("select").translation.x = systems[key].x
+				get_parent().get_parent().get_node("select").translation.y = systems[key].y * 0.5
+				get_parent().get_parent().get_node("select").translation.z = systems[key].z - 1
 			else:
 				# key.set_selected(true)
 				# item_selected = key

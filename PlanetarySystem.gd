@@ -33,7 +33,7 @@ var materials = {
 }
 
 func _ready():
-	pass
+	set_process_input(true)
 
 func init():
 	var central_star = ref
@@ -42,16 +42,16 @@ func init():
 	var star_light = lights[ref.spectral_class.spectral].instance()
 	center.get_node("Mesh").set_material_override(star_material)
 	center.add_child(star_light)
-	add_child(center)
+	$system_gimbal/system.add_child(center)
 	print(ref.read_star_size_num())
 	center.transform.basis.x = Vector3(float(ref.read_star_size_num()), 0, 0)
 	center.transform.basis.y = Vector3(0, float(ref.read_star_size_num()), 0)
 	center.transform.basis.z = Vector3(0,0,float(ref.read_star_size_num()))
-	$camera.size = 3.5*ref.planetary_slots.total
+	$camera_gimbal/camera.size = 3.5*ref.planetary_slots.total
 	for star in ref.planets.size():
 		if ref.planet_slots[star] != 0:
 			planets[ref.planets[star]] = planet_instance.instance()
-			add_child(planets[ref.planets[star]])
+			$system_gimbal/system.add_child(planets[ref.planets[star]])
 			var t = rand_range(1, 10000)
 			if ref.planet_slots[star] > 0:
 				var period = 1/float(ref.planet_slots[star])
@@ -69,18 +69,48 @@ func create_zones():
 	var size_B = size_A + ref.planetary_slots.B
 	var size_C = size_B + ref.planetary_slots.C
 	var size_D = size_C + ref.planetary_slots.D
-	$A.transform.basis.x = Vector3(size_A*2, 0, 0)
-	$A.transform.basis.z = Vector3(0, 0, size_A*2)
-	$B.transform.basis.x = Vector3(size_B*2, 0, 0)
-	$B.transform.basis.z = Vector3(0, 0, size_B*2)
-	$C.transform.basis.x = Vector3(size_C*2, 0, 0)
-	$C.transform.basis.z = Vector3(0, 0, size_C*2)
-	$D.transform.basis.x = Vector3(size_D*2, 0, 0)
-	$D.transform.basis.z = Vector3(0, 0, size_D*2)
+	$system_gimbal/system/A.transform.basis.x = Vector3(size_A*2, 0, 0)
+	$system_gimbal/system/A.transform.basis.z = Vector3(0, 0, size_A*2)
+	$system_gimbal/system/B.transform.basis.x = Vector3(size_B*2, 0, 0)
+	$system_gimbal/system/B.transform.basis.z = Vector3(0, 0, size_B*2)
+	$system_gimbal/system/C.transform.basis.x = Vector3(size_C*2, 0, 0)
+	$system_gimbal/system/C.transform.basis.z = Vector3(0, 0, size_C*2)
+	$system_gimbal/system/D.transform.basis.x = Vector3(size_D*2, 0, 0)
+	$system_gimbal/system/D.transform.basis.z = Vector3(0, 0, size_D*2)
 
+var view_mode = []
+func _input(event):
+	if event is InputEventMouseButton:
+		if event.button_index == BUTTON_LEFT:
+			if event.is_pressed():
+				view_mode.push_front(1)
+			else:
+				view_mode.erase(1)
+		if event.button_index == BUTTON_RIGHT:
+			if event.is_pressed():
+				view_mode.push_front(2)
+			else:
+				view_mode.erase(2)
+		if event.button_index == BUTTON_MIDDLE:
+			if event.is_pressed():
+				view_mode.push_front(3)
+			else:
+				view_mode.erase(3)
+	elif event is InputEventMouseMotion:
+		if view_mode.has(1) and view_mode.has(2):
+			$camera_gimbal.translation = $camera_gimbal.translation + $camera_gimbal/camera.transform.basis.y * event.relative.y/12 - $camera_gimbal/camera.transform.basis.x * event.relative.x/12
+		elif view_mode.has(1):
+			$camera_gimbal.rotate_y(-1*event.relative.x/50)
+			$camera_gimbal/camera.rotate_x(-1*event.relative.y/50)
+		elif view_mode.has(2):
+			$system_gimbal/system.rotate_y(event.relative.x/50)
+			$system_gimbal.rotate_x(event.relative.y/50)
+		elif view_mode.has(3):
+			$camera_gimbal.translation = $camera_gimbal.translation + $camera_gimbal/camera.transform.basis.z * event.relative.y/10
 
 func _on_Back_pressed():
 	get_tree().get_root().get_children()[0].show()
-	$camera.current = false
-	get_tree().get_root().get_children()[1].get_node("camera").current = true
+	$camera_gimbal/camera.current = false
+	get_tree().get_root().get_children()[1].get_node("camera_gimbal/camera").current = true
 	queue_free()
+
