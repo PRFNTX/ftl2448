@@ -149,7 +149,7 @@ func get_planetary_slots():
 		{"total": 60, "A": 10, "B": 10, "C": 20, "D": 20, "planets": int(rand_range(0, 11))},
 		{"total": 64, "A": 12, "B": 12, "C": 20, "D": 20, "planets": int(rand_range(0, 19))},
 	]
-	return slots[table[spectral_class['spectral']][star_size-1]]
+	return slots[table[spectral_class['spectral']][star_size-1]-1]
 
 func read_star_size_num():
 	return star_size

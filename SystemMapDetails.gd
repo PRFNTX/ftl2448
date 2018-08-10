@@ -4,45 +4,51 @@ var maxCol = 31
 var numRows = 41
 onready var totalHexes = pow(numRows - (maxCol/2), 2) + pow(maxCol/2, 2)
 onready var systemTemplate = load('res://System.tscn')
-var systems = []
+onready var systems = [
+	add_system(0,-20,20,3),
+	add_system(-15,-11,20,3),
+	add_system(15, -11, 20, 3),
+	add_system(-15, 11, -20, 3),
+	add_system(15, 11, -20, 3),
+	add_system(0, 20, -20, 3)
+]
 var cursor = 0
 
 func cursor_to_pos(cursor):
 	var count = cursor
 	var x = 0
 	var y = -20
-	for i in range(1, 31):
+	for i in range(3, 30, 3):
 		if count > i:
 			count -= i 
 			y += 1
 		else:
-			x = count - i/2
-			count = 0
+			x = count - float(i/2)
+			count = -1
 			break
 	if count > 0:
 		for j in range(0, 20):
-			if count > 40:
-				count -= j 
+			if count > 30:
+				count -= 30
 				y += 1
 			else:
 				x = count - 20
-				count = 0
+				count = -1
 				break
 	if count > 0:
-		for k in range(31, 0, -1):
+		for k in range(30, 3, -3):
 			if count > k:
 				count -= k 
 				y += 1
 			else:
-				x = count - k/2
-				count = 0
+				x = count - float(k/2)
+				count = -1
 				break
 	return [x, y]
 
-func add_system():
+func add_system(x=null,y=null,z=null,size=1):
 	var move = int(rand_range(3, 60)) #should be 100
 	cursor += move
-	print(str(cursor) + " of " + str(totalHexes))
 	if cursor < totalHexes:
 		var pos = cursor_to_pos(cursor)
 		var system = systemTemplate.instance()
@@ -54,9 +60,18 @@ func add_system():
 			"z": int(rand_range(-20, 20)),
 			"system": system
 		}
-		system.translation.x = next_system.x
-		system.translation.y = next_system.y*.5
-		system.translation.z = next_system.z
+		if x!=null:
+			next_system.x = x
+		if y!=null:
+			next_system.y = y
+		if z!=null:
+			next_system.z = z
+		system.translation.z = next_system.x * 1.55
+		system.translation.y = next_system.z
+		system.translation.x = next_system.y* 1.5
+		system.transform.basis.x = system.transform.basis.x * size
+		system.transform.basis.y = system.transform.basis.y * size
+		system.transform.basis.z = system.transform.basis.z * size
 		#system.get_node("star/drop").transform.basis.z = Vector3(0, 0, next_system.z + 20)
 		#system.get_node("star/drop").translation.z = (next_system.z + 20) /2
 		return next_system
@@ -71,6 +86,7 @@ func get_hex_position(row, col):
 
 func _ready():
 	randomize()
+	cursor = 0
 	var space = true
 	var num_systems = 0
 	while space:
@@ -80,7 +96,6 @@ func _ready():
 			space = next_system
 		else:
 			systems.append(next_system)
-	make_tree()
 
 var tree
 var root
@@ -93,7 +108,7 @@ var tree_moons = {}
 var tree_moon_details = {}
 
 func make_tree():
-	tree = get_parent().get_parent().get_node("UI/tree")
+	tree = get_parent().get_parent().get_parent().get_node("UI/tree")
 	root = tree.create_item()
 	var i = 0
 	for system in systems:
@@ -167,9 +182,9 @@ func _on_tree_cell_selected():
 			if levels == 1:
 				# systems[key].system.set_selected(true)
 				# item_selected = systems[key].system
-				get_parent().get_parent().get_node("select").translation.x = systems[key].x
-				get_parent().get_parent().get_node("select").translation.y = systems[key].y * 0.5
-				get_parent().get_parent().get_node("select").translation.z = systems[key].z - 1
+				get_parent().get_parent().get_parent().get_node("select").translation.x = systems[key].x
+				get_parent().get_parent().get_parent().get_node("select").translation.y = systems[key].y * 0.5
+				get_parent().get_parent().get_parent().get_node("select").translation.z = systems[key].z - 1
 			else:
 				# key.set_selected(true)
 				# item_selected = key

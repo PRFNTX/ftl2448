@@ -12,3 +12,7 @@ config_version=3
 
 config/name="FTL: 2448"
 config/icon="res://icon.png"
+
+[autoload]
+
+globals="*res://globals.gd"

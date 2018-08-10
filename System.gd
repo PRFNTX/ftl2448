@@ -13,27 +13,6 @@ var star_slots = []
 
 var planetary_view_scene = load("res://PlanetarySystem.tscn")
 
-var lights = {
-	"O": load("res://Lighting/Blue.tscn"),
-	"B": load("res://Lighting/White-Blue.tscn"),
-	"A": load("res://Lighting/White.tscn"),
-	"F": load("res://Lighting/Yellow-white.tscn"),
-	"G": load("res://Lighting/Yellow.tscn"),
-	"K": load("res://Lighting/Orange.tscn"),
-	"M": load("res://Lighting/Red.tscn"),
-	"N": load("res://Lighting/Dark.tscn")
-}
-var materials = {
-	"O": load("res://BlueStar.tres"),
-	"B": load("res://WhiteBlueStar.tres"),
-	"A": load("res://WhiteStar.tres"),
-	"F": load("res://Yellow-White.tres"),
-	"G": load("res://YellowStar.tres"),
-	"K": load("res://OrangeStar.tres"),
-	"M": load("res://RedStar.tres"),
-	"N": load("res://DarkStar.tres")
-}
-
 func start():
 	num_stars = get_num_stars()
 	for i in range(0, num_stars):
@@ -95,22 +74,22 @@ func start():
 						groups.append(group)
 					break
 		var found = are_in_groups.size() > 0
-		while found:
-			found = false
-			for pos in are_in_groups:
-				var is_in = []
-				for group_num in groups.size():
-					if groups[group_num].has(pos):
-						is_in.append(group_num)
-				if is_in.size() > 1:
-					found = true
-					var base_group = groups[is_in[0]]
-					for other_group in range(1,is_in.size()):
-						for item in groups[other_group]:
-							base_group.append(item)
-					for other_group in range(is_in.size(), 1):
-						groups.remove(other_group)
-					break
+		#while found and groups!=null:
+		#	found = false
+		#	for pos in are_in_groups:
+		#		var is_in = []
+		#		for group_num in groups.size():
+		#			if groups[group_num].has(pos):
+		#				is_in.append(group_num)
+		#		if is_in.size() > 1:
+		#			found = true
+		#			var base_group = groups[is_in[0]]
+		#			for other_group in range(0,is_in.size()-1):
+		#				for item in groups[other_group]:
+		#					base_group.append(item)
+		#			for other_group in range(is_in.size(), 1, -1):
+		#				groups.remove(other_group)
+		#			break
 		#groups contain slot numbers
 		# star in slot group[i] = stars[star_slots.find(group[i])]
 		for group in groups:
@@ -129,10 +108,10 @@ func start():
 				largest.orbited_by.append(stars[star_slots.find(group[star])])
 		# holy fuck
 	system_features = get_system_features()
-	var star_light = lights[stars[star_slots.find(0)].spectral_class.spectral]
-	var star_material = materials[stars[star_slots.find(0)].spectral_class.spectral]
-	$star.set_material_override(star_material)
-	$star.add_child(star_light.instance())
+	#var star_light = lights[stars[star_slots.find(0)].spectral_class.spectral]
+	#var star_material = materials[stars[star_slots.find(0)].spectral_class.spectral]
+	#$star.set_material_override(star_material)
+	#$star.add_child(star_light.instance())
 	
 
 func get_num_stars():
@@ -285,13 +264,12 @@ func get_star_specials():
 			}
 
 
-func _on_StaticBody_input_event( camera, event, click_position, click_normal, shape_idx ):
+func _on_StaticBody_input_event(camera, event, click_position, click_normal, shape_idx ):
 	if event is InputEventMouseButton and event.is_pressed():
 		var show_system = planetary_view_scene.instance()
 		show_system.ref = stars[0]
 		show_system.init()
-		show_system.get_node("camera_gimbal/camera").current = true
-		get_tree().get_root().get_children()[0].get_node("camera_gimbal/camera").current = false
+		get_tree().get_root().get_node('globals').set_current_camera(show_system.get_node("camera_gimbal/camera"))
 		get_tree().get_root().add_child(show_system)
 		get_tree().get_root().get_children()[0].hide()
 

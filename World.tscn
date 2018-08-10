@@ -1,11 +1,17 @@
-[gd_scene load_steps=5 format=2]
+[gd_scene load_steps=7 format=2]
 
 [ext_resource path="res://World.gd" type="Script" id=1]
 [ext_resource path="res://SpaceEnvironment.tres" type="Environment" id=2]
 [ext_resource path="res://SystemMapDetails.tscn" type="PackedScene" id=3]
-[ext_resource path="res://Art/light-spot-orb-png-8.png" type="Texture" id=4]
+[ext_resource path="res://Art/White hex.png" type="Texture" id=4]
+[ext_resource path="res://Art/light-spot-orb-png-8.png" type="Texture" id=5]
 
-[node name="World" type="Spatial" index="0"]
+[sub_resource type="CapsuleShape" id=1]
+
+radius = 1.0
+height = 1.0
+
+[node name="World" type="Spatial"]
 
 script = ExtResource( 1 )
 
@@ -25,17 +31,91 @@ doppler_tracking = 0
 projection = 0
 current = false
 fov = 70.0
-size = 40.0
+size = 80.0
 near = 0.05
-far = 100.0
+far = 200.0
 _sections_unfolded = [ "Transform", "Visibility" ]
 
 [node name="system_gimbal" type="Spatial" parent="." index="1"]
 
-[node name="SystemMapDetails" parent="system_gimbal" index="0" instance=ExtResource( 3 )]
+_sections_unfolded = [ "Transform" ]
+
+[node name="system" type="Spatial" parent="system_gimbal" index="0"]
+
+transform = Transform( 0.850888, 0, 0.525348, 0, 1, 0, -0.525348, 0, 0.850888, 0, 0, 0 )
+_sections_unfolded = [ "Transform" ]
+
+[node name="SystemMapDetails" parent="system_gimbal/system" index="0" instance=ExtResource( 3 )]
+
+_sections_unfolded = [ "Transform" ]
+
+[node name="hexbot" type="Sprite3D" parent="system_gimbal/system" index="1"]
+
+transform = Transform( 13.9546, 0, -8.6157, 0, 1, 0, 8.6157, 0, 13.9546, 0, -19.992, 0 )
+layers = 1
+material_override = null
+cast_shadow = 1
+extra_cull_margin = 0.0
+use_in_baked_light = false
+lod_min_distance = 0.0
+lod_min_hysteresis = 0.0
+lod_max_distance = 0.0
+lod_max_hysteresis = 0.0
+centered = true
+offset = Vector2( 0, 0 )
+flip_h = false
+flip_v = false
+modulate = Color( 1, 1, 1, 1 )
+opacity = 1.0
+pixel_size = 0.01
+axis = 1
+transparent = true
+shaded = false
+double_sided = true
+alpha_cut = 0
+texture = ExtResource( 4 )
+vframes = 1
+hframes = 1
+frame = 0
+region_enabled = false
+region_rect = Rect2( 0, 0, 0, 0 )
+_sections_unfolded = [ "Transform" ]
+
+[node name="hextop" type="Sprite3D" parent="system_gimbal/system" index="2"]
+
+transform = Transform( 13.9546, 0, -8.6157, 0, 1, 0, 8.6157, 0, 13.9546, 0, 24.6127, 0 )
+layers = 1
+material_override = null
+cast_shadow = 1
+extra_cull_margin = 0.0
+use_in_baked_light = false
+lod_min_distance = 0.0
+lod_min_hysteresis = 0.0
+lod_max_distance = 0.0
+lod_max_hysteresis = 0.0
+centered = true
+offset = Vector2( 0, 0 )
+flip_h = false
+flip_v = false
+modulate = Color( 1, 1, 1, 1 )
+opacity = 1.0
+pixel_size = 0.01
+axis = 1
+transparent = true
+shaded = false
+double_sided = true
+alpha_cut = 0
+texture = ExtResource( 4 )
+vframes = 1
+hframes = 1
+frame = 0
+region_enabled = false
+region_rect = Rect2( 0, 0, 0, 0 )
+_sections_unfolded = [ "Transform" ]
 
 [node name="UI" type="Control" parent="." index="2"]
 
+visible = false
 anchor_left = 0.0
 anchor_top = 0.0
 anchor_right = 0.0
@@ -50,6 +130,7 @@ size_flags_vertical = 1
 
 [node name="tree" type="Tree" parent="UI" index="0"]
 
+visible = false
 anchor_left = 0.0
 anchor_top = 0.0
 anchor_right = 0.0
@@ -74,6 +155,7 @@ select_mode = 0
 [node name="select" type="Sprite3D" parent="." index="3"]
 
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -1 )
+visible = false
 layers = 1
 material_override = null
 cast_shadow = 1
@@ -95,7 +177,7 @@ transparent = true
 shaded = false
 double_sided = true
 alpha_cut = 0
-texture = ExtResource( 4 )
+texture = ExtResource( 5 )
 vframes = 1
 hframes = 1
 frame = 0
@@ -105,6 +187,7 @@ _sections_unfolded = [ "Transform" ]
 
 [node name="Go to" type="Button" parent="." index="4"]
 
+visible = false
 anchor_left = 0.0
 anchor_top = 0.0
 anchor_right = 0.0
@@ -124,8 +207,26 @@ group = null
 flat = false
 align = 1
 
-[connection signal="cell_selected" from="UI/tree" to="system_gimbal/SystemMapDetails" method="_on_tree_cell_selected"]
+[node name="clickable" type="StaticBody" parent="." index="5"]
 
-[connection signal="pressed" from="Go to" to="system_gimbal/SystemMapDetails" method="_on_Go_to_pressed"]
+input_ray_pickable = true
+input_capture_on_drag = false
+collision_layer = 1
+collision_mask = 1
+friction = 1.0
+bounce = 0.0
+constant_linear_velocity = Vector3( 0, 0, 0 )
+constant_angular_velocity = Vector3( 0, 0, 0 )
+
+[node name="shape" type="CollisionShape" parent="clickable" index="0"]
+
+transform = Transform( 20, 0, 0, 0, 22, 0, 0, 0, 15, 0, 0, 0 )
+shape = SubResource( 1 )
+disabled = false
+_sections_unfolded = [ "Transform" ]
+
+[connection signal="cell_selected" from="UI/tree" to="system_gimbal/system/SystemMapDetails" method="_on_tree_cell_selected"]
+
+[connection signal="pressed" from="Go to" to="system_gimbal/system/SystemMapDetails" method="_on_Go_to_pressed"]
 
 

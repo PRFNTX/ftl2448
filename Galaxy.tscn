@@ -1,0 +1,40 @@
+[gd_scene load_steps=2 format=2]
+
+[ext_resource path="res://Galaxy.gd" type="Script" id=1]
+
+[node name="Galaxy" type="Spatial" index="0"]
+
+script = ExtResource( 1 )
+
+[node name="camera_gimbal" type="Spatial" parent="." index="0"]
+
+[node name="camera" type="Camera" parent="camera_gimbal" index="0"]
+
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 100 )
+keep_aspect = 1
+cull_mask = 1048575
+environment = null
+h_offset = 0.0
+v_offset = 0.0
+doppler_tracking = 0
+projection = 0
+current = true
+fov = 70.0
+size = 100.0
+near = 0.05
+far = 300.0
+_sections_unfolded = [ "Transform" ]
+
+[node name="system_gimbal" type="Spatial" parent="." index="1"]
+
+_sections_unfolded = [ "Transform" ]
+
+[node name="system" type="Spatial" parent="system_gimbal" index="0"]
+
+_sections_unfolded = [ "Transform" ]
+
+[node name="slider" type="Spatial" parent="system_gimbal/system" index="0"]
+
+_sections_unfolded = [ "Transform" ]
+
+

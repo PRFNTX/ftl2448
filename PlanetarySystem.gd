@@ -11,39 +11,17 @@ var planets = {
 var planet_times = {
 }
 
-var lights = {
-	"O": load("res://Lighting/Blue.tscn"),
-	"B": load("res://Lighting/White-Blue.tscn"),
-	"A": load("res://Lighting/White.tscn"),
-	"F": load("res://Lighting/Yellow-white.tscn"),
-	"G": load("res://Lighting/Yellow.tscn"),
-	"K": load("res://Lighting/Orange.tscn"),
-	"M": load("res://Lighting/Red.tscn"),
-	"N": load("res://Lighting/Dark.tscn")
-}
-var materials = {
-	"O": load("res://BlueStar.tres"),
-	"B": load("res://WhiteBlueStar.tres"),
-	"A": load("res://WhiteStar.tres"),
-	"F": load("res://Yellow-White.tres"),
-	"G": load("res://YellowStar.tres"),
-	"K": load("res://OrangeStar.tres"),
-	"M": load("res://RedStar.tres"),
-	"N": load("res://DarkStar.tres")
-}
-
 func _ready():
-	set_process_input(true)
+	set_process_input(false)
 
 func init():
 	var central_star = ref
 	center = star_instance.instance()
-	var star_material = materials[ref.spectral_class.spectral]
-	var star_light = lights[ref.spectral_class.spectral].instance()
-	center.get_node("Mesh").set_material_override(star_material)
-	center.add_child(star_light)
+	#var star_material = materials[ref.spectral_class.spectral]
+	#var star_light = lights[ref.spectral_class.spectral].instance()
+	#center.get_node("Mesh").set_material_override(star_material)
+	#center.add_child(star_light)
 	$system_gimbal/system.add_child(center)
-	print(ref.read_star_size_num())
 	center.transform.basis.x = Vector3(float(ref.read_star_size_num()), 0, 0)
 	center.transform.basis.y = Vector3(0, float(ref.read_star_size_num()), 0)
 	center.transform.basis.z = Vector3(0,0,float(ref.read_star_size_num()))
@@ -62,7 +40,6 @@ func init():
 			else:
 				planets[ref.planets[star]].translation.x = (ref.planet_slots[star])
 	create_zones()
-	print(ref.planets.size())
 
 func create_zones():
 	var size_A = ref.planetary_slots.A + 2
@@ -111,6 +88,8 @@ func _input(event):
 func _on_Back_pressed():
 	get_tree().get_root().get_children()[0].show()
 	$camera_gimbal/camera.current = false
-	get_tree().get_root().get_children()[1].get_node("camera_gimbal/camera").current = true
+	get_tree().get_root().get_node("globals").set_current_camera(
+		get_tree().get_root().get_children()[1].get_node("camera_gimbal/camera")
+	)
 	queue_free()
 
